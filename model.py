@@ -1,4 +1,3 @@
-"""RGCN layer implementation"""
 import dgl
 import dgl.function as fn
 import dgl.nn as dglnn
@@ -158,26 +157,20 @@ class RelGraphConvLayer(nn.Module):
                 if src_type not in inputs or dst_type not in inputs:
                     continue
                     
-                # 计算源节点和目标节点的特征
                 src_feat = inputs_src[src_type]
                 dst_feat = inputs_dst[dst_type]
                 
-                # 获取边的源节点和目标节点索引
                 src, dst = g.edges(etype=rel_type)
                 
-                # 计算attention scores
                 h_src = src_feat[src]
                 h_dst = dst_feat[dst]
                 
-                # 将源节点和目标节点特征拼接
                 edge_feat = th.cat([h_src, h_dst], dim=1)
                 attention_scores = self.attention[rel_type](edge_feat)
                 attention_weights = F.softmax(attention_scores, dim=0)
                 
-                # 在应用attention weights之前进行特征转换
                 transformed_h = self.transform[rel_type](h_src)
                 
-                # 应用attention weights到转换后的特征
                 g.edges[rel_type].data['h'] = transformed_h
                 g.edges[rel_type].data['a'] = attention_weights
 
