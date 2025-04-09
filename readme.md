@@ -1,3 +1,5 @@
+# LLM-Enhanced Heterogeneous Graph Neural Networks for Research Project Conflict Detection
+
 ## Environment Setup
 
 ### Requirements
